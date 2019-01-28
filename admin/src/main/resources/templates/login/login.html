@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>登录</title>
+
+    <!-- 引入组件库 Vue -->
+    <script src="/js/vue/2.5.16/vue.min.js"></script>
+
+    <!-- 引入样式、组件库 iview -->
+    <link href="/css/iview/3.1.3/styles/iview.css" rel="stylesheet">
+    <script src="/css/iview/3.1.3/iview.min.js"></script>
+    <script src="/css/iview/3.1.3/locale/zh-CN.js"></script>
+
+    <!-- 引入组件库: axios ajax -->
+    <script src="/js/axios/0.16.2/axios.min.js"></script>
+    <!-- 引入组件库: lodash -->
+    <script src="/js/lodash.js/4.17.4/lodash.min.js"></script>
+
+</head>
+<body>
+
+<div id="content">
+
+    <i-input prefix="ios-mail"
+             v-model="email"
+             size="large"
+             placeholder="请输入邮箱账号"
+             style="width: 300px"></i-input>
+
+    <i-input prefix="md-lock"
+             v-model="password"
+             size="large"
+             placeholder="请输入密码"
+             :icon="passwordIcon"
+             @on-click="passwordOnClick"
+             style="width: 300px"
+             :type="passwordType"></i-input>
+
+    <i-button type="primary" @click="loginClick">登录</i-button>
+</div>
+
+<script>
+    var content = new Vue({
+        el: '#content',
+        data: {
+            email: '',
+            password: '',
+            passwordIcon:'ios-eye',
+            passwordType:'password',
+        },
+        methods: {
+            passwordOnClick: function () {
+                if (this.passwordIcon === 'ios-eye') {
+                    this.passwordIcon = 'ios-eye-off';
+                    this.passwordType = 'text';
+                } else {
+                    this.passwordIcon = 'ios-eye';
+                    this.passwordType = 'password';
+                }
+            },
+            loginClick: function () {
+                axios.post('/login', {
+                    email: this.email,
+                    password: this.password
+                }, {
+                    timeout: 5000
+                }).then(function (response) {
+                    const apiResult = response.data;
+                    if (!apiResult.succ) {
+                        $this.$Message.warning(apiResult.msg);
+                    } else {
+                        const configInfoList = apiResult.data;
+                    }
+
+//                    $this.serviceProvidersLoading = false;
+                }).catch(function (error) {
+//                    $this.serviceProvidersLoading = false;
+                    $this.$Message.warning('删除未知异常.');
+                });
+            }
+        }
+    });
+</script>
+</body>
+</html>

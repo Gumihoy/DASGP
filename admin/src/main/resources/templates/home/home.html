@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorate="~{layouts/default_layout}">
+
+<div layout:fragment="content">
+
+    <style>
+        .ivu-table-header {
+            font-size: 14px;
+        }
+
+        .ivu-table-body {
+            font-size: 14px;
+        }
+
+        #home-layout {
+        }
+
+        .layout-tabs {
+            margin: 20px 0 0 0;
+        }
+    </style>
+
+
+    <div id="home-layout">
+        <div class="layout-search">
+            <auto-complete
+                    v-model="appName"
+                    :data="appNames"
+                    icon="ios-search"
+                    @on-search="searchSuggest"
+                    @on-change="searchChange"
+                    @on-select="searchSelect"
+                    placeholder="appName、负责人、为空查询全部"
+                    size="large"
+                    clearable="true"
+                    style="width:800px">
+            </auto-complete>
+        </div>
+
+        <div class="layout-tabs">
+            <Tabs value="allServices" :animated="false" @on-click="tabOnClick">
+                <tab-pane label="负责的服务" name="ownerServices">
+                    <!-- page content -->
+                    <!--<i-table :columns="ownerAppsColumns" :data="ownerAppsData" stripe="true" context="ownerAppsVue">-->
+                    <!--</i-table>-->
+                </tab-pane>
+
+                <tab-pane label="关注的服务" name="followersServices">
+                </tab-pane>
+
+                <tab-pane label="业务线服务" name="businessLineServices">
+                </tab-pane>
+
+                <tab-pane label="事业群服务" name="businessGroupServices">
+                </tab-pane>
+
+                <tab-pane label="全部服务" name="allServices">
+                    <!-- page content -->
+                    <div layout:fragment="allServicesContent"></div>
+                </tab-pane>
+            </Tabs>
+        </div>
+    </div>
+
+    <script>
+        var homeLayoutVue = new Vue({
+            el: '#home-layout',
+            data: {
+                // 查询
+                appName: '',
+                appNames: [],
+                // tabs
+                tabValue: '',
+
+            },
+            created: function () {
+//                console.log("homeLayoutVue created.....");
+            },
+            methods: {
+                // 查询
+                searchSuggest: _.debounce(
+                    function (appName) {
+                        var $this = this;
+                        axios.get('/ownerApps', {
+                            params: {
+                                appName: appName
+                            }
+                        }).then(function (response) {
+                            var ownerAppsData = response.data;
+                            if (!ownerServicesData.succ) {
+                                $this.$Message.warning(ownerServicesData.msg);
+                            } else {
+                                var ownerServices = ownerServicesData.data;
+                                // 渲染
+                                for (var i = 0; i < ownerServices.length; i++) {
+                                    $this.ServiceNames[i] = ownerServices[i].name;
+                                }
+
+                            }
+
+                        }).catch(function (error) {
+                            $this.$Message.warning('查询未知异常.');
+                        });
+
+                    },
+                    // 这是我们为用户停止输入等待的毫秒数
+                    100
+                ),
+                searchChange: function () {
+                    console.log("change");
+                },
+                searchSelect: function (appName) {
+                    var $this = this;
+                    axios.get('/ownerServices', {
+                        params: {
+                            appName: appName
+                        }
+                    }).then(function (response) {
+                        var ownerServicesData = response.data;
+                        if (!ownerServicesData.succ) {
+                            $this.$Message.warning(ownerServicesData.msg);
+                        } else {
+                            var ownerServices = ownerServicesData.data;
+                            // 渲染
+                            for (var i = 0; i < ownerServices.length; i++) {
+
+                            }
+                        }
+
+                    }).catch(function (error) {
+                        $this.$Message.warning('查询未知异常.');
+                    });
+                },
+                // tabs
+                tabOnClick: function (tabValue) {
+                    switch (tabValue) {
+                        case 'ownerServices':
+                            location.href = "/afafa";
+                            break;
+                        case 'followersServices':
+                            location.href = "/afafa/followers";
+                            break;
+                        case 'businessLineServices':
+                            location.href = "/afafa/businessLine";
+                            break;
+                        case 'businessGroupServices':
+                            location.href = "/afafa/businessGroup";
+                            break;
+                        case 'allServices':
+                            location.href = "/afafa/all";
+                            break;
+                        default:
+                            location.href = "/afafa";
+                            break;
+                    }
+                },
+
+
+            }
+        });
+    </script>
+
+</div>
+
+<!--<div layout:fragment="ServicesScript"></div>-->
+</html>

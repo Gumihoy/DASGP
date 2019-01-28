@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+
+<div th:fragment="header">
+
+    <style scoped>
+        .layout-logo {
+            border-radius: 3px;
+            float: left;
+            position: relative;
+            padding-left: 40px;
+            font-size: 17px;
+            font-weight: bold;
+        }
+
+        .layout-nav {
+            margin-left: 160px;
+            font-weight: bold;
+        }
+
+        [v-cloak] {
+            display: none !important;
+        }
+    </style>
+
+    <div id="header" class="layout" v-cloak>
+        <i-menu mode="horizontal" theme="light" :active-name="navName" @on-select="menuSelect">
+            <div class="layout-logo">
+                分布式服务治理平台
+            </div>
+
+            <div class="layout-nav">
+                <Submenu name="serviceDetails">
+                    <template slot="title">
+                        <icon type="ios-paper"></icon>
+                        服务详情
+                    </template>
+                    <menu-group title="我的服务">
+                        <menu-item name="ownerServicesNav">负责的服务</menu-item>
+                        <menu-item name="followerServicesNav">关注的服务</menu-item>
+                        <menu-item name="businessLineServicesNav">业务线服务</menu-item>
+                        <menu-item name="businessGroupServicesNav">事业群服务</menu-item>
+                        <menu-item name="allServicesNav">全部服务</menu-item>
+                    </menu-group>
+                    <menu-group title="服务详情">
+                        <menu-item name="serviceProvidersNav">服务提供者</menu-item>
+                        <menu-item name="serviceConsumersNav">服务消费者</menu-item>
+                        <menu-item name="serviceInfoNav">服务信息</menu-item>
+                        <menu-item name="serviceDependencyNav">服务依赖</menu-item>
+                        <menu-item name="componentDependencyNav">组件依赖</menu-item>
+                        <menu-item name="realTimeLogNav">实时日志</menu-item>
+                    </menu-group>
+                </Submenu>
+
+                <Submenu name="serviceOperation">
+                    <template slot="title">
+                        <icon type="ios-people"></icon>
+                        服务运营
+                    </template>
+                    <menu-group title="服务运营">
+                        <menu-item name="serviceConfigurationManagementNav">配置管理</menu-item>
+                        <menu-item name="serviceGroupingNav">服务分组</menu-item>
+                        <menu-item name="serviceAccessControlNav">访问控制</menu-item>
+                        <menu-item name="serviceOperationRecordNav">操作记录</menu-item>
+                    </menu-group>
+                </Submenu>
+                <Submenu name="3">
+                    <template slot="title">
+                        <Icon type="stats-bars"></Icon>
+                        数据分析
+                    </template>
+                    <menu-group title="使用">
+                        <menu-item name="3-1">新增和启动</menu-item>
+                        <menu-item name="3-2">活跃分析</menu-item>
+                        <menu-item name="3-3">时段分析</menu-item>
+                    </menu-group>
+                    <menu-group title="留存">
+                        <menu-item name="3-4">用户留存</menu-item>
+                        <menu-item name="3-5">流失用户</menu-item>
+                    </menu-group>
+                </Submenu>
+                <menu-item name="4">
+                    <Icon type="settings"></Icon>
+                    服务报表
+                </menu-item>
+            </div>
+
+        </i-menu>
+    </div>
+
+    <script>
+        var header = new Vue({
+            el: '#header',
+            data: {
+                navName: ''
+            },
+            methods: {
+                menuSelect: function (name) {
+                    switch (name) {
+                        // ======= 服务详情 - 我的服务 =================
+                        case 'ownerServicesNav':
+                            location.href = "/afafa";
+                            break;
+                        case 'followerServicesNav':
+                            location.href = "/afafa/followers";
+                            break;
+                        case 'businessLineServicesNav':
+                            location.href = "/afafa/businessLine";
+                            break;
+                        case 'businessGroupServicesNav':
+                            location.href = "/afafa/businessGroup";
+                            break;
+                        case 'allServicesNav':
+                            location.href = "/afafa/all";
+                            break;
+                        // ======= 服务详情 - 服务详情 =================
+                        case 'serviceProvidersNav':
+                            location.href = "/service/afafa/providers";
+                            break;
+                        case 'serviceConsumerNav':
+                            location.href = "/service/afafa/consumers";
+                            break;
+                        case 'serviceInfoNav':
+                            location.href = "/service/afafa/info";
+                            break;
+                        case 'serviceDependencyNav':
+                            location.href = "/service/afafa/dependency";
+                            break;
+                        case 'componentDependencyNav':
+                            location.href = "/service/afafa/componentDependency";
+                            break;
+                        case 'realTimeLogNav':
+                            location.href = "/service/afafa/realTimeLog";
+                            break;
+                        // ======= 服务运营 =================
+                        case 'serviceConfigurationManagementNav':
+                            location.href = "/service/afafa/configurationManagement";
+                            break;
+                        case 'serviceGroupingNav':
+                            location.href = "/service/afafa/grouping";
+                            break;
+                        case 'serviceAccessControlNav':
+                            location.href = "/service/afafa/accessControl";
+                            break;
+                        case 'serviceOperationRecordNav':
+                            location.href = "/service/afafa/operationRecord";
+                            break;
+                        default:
+//                            location.href = "/afafa";
+                            break;
+                    }
+                }
+            }
+        });
+    </script>
+
+</div>
+</html>
